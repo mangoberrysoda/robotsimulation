@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Search & Rescue Simulation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Left Panel: User Inputs (50%) -->
+        <aside class="controls-area">
+            <h1>Search & Rescue</h1>
+
+            <!-- 1. Live Stats (Now a widget) -->
+            <div class="control-group stats-widget">
+                <h2>Live Stats</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span>Status:</span>
+                        <span id="simStatus">Idle</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Active Robots:</span>
+                        <span id="activeRobots">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Cleaned Area:</span>
+                        <div class="progress-container">
+                            <div id="coverageBar" class="progress-fill"></div>
+                            <span id="coverageText">0%</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <span>Survivors Located:</span>
+                        <span id="survivorsLocated">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Survivors Saved:</span>
+                        <span id="survivorsSaved">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Steps:</span>
+                        <span id="stepCount">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h2>Map</h2>
+                <input type="file" id="mapUpload" accept="image/*">
+                <p class="hint">Dark areas = Obstacles</p>
+            </div>
+
+            <div class="control-group">
+                <h2>Placement</h2>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="placementTool" value="survivor" checked>
+                        Place Survivors
+                    </label>
+                    <label>
+                        <input type="radio" name="placementTool" value="robot">
+                        Place Robots (Start)
+                    </label>
+                </div>
+                <button id="clearEntities">Clear All</button>
+            </div>
+
+            <!-- Reordered: Simulation above Robot Settings -->
+            <div class="control-group">
+                <h2>Simulation</h2>
+                <label>
+                    Speed (FPS): <span id="simSpeedDisplay">60</span>
+                    <input type="range" id="simSpeed" min="1" max="60" value="60">
+                </label>
+                <label>
+                    Steps/Update: <span id="stepsPerUpdateDisplay">5</span>
+                    <input type="range" id="stepsPerUpdate" min="1" max="50" value="5">
+                </label>
+                <label>
+                    Total Steps: <input type="number" id="totalSteps" value="10000">
+                </label>
+                <div class="button-row">
+                    <button id="startSim" class="primary">Start</button>
+                    <button id="stopSim" class="secondary" disabled>Stop</button>
+                    <button id="resetSim" class="danger">Reset</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h2>Robot Settings</h2>
+                <label>
+                    Count: <span id="robotCountDisplay">1</span>
+                    <input type="range" id="robotCount" min="1" max="10" value="1">
+                </label>
+                <label>
+                    Lidar Range: <span id="lidarRangeDisplay">150</span>
+                    <input type="range" id="lidarRange" min="50" max="300" value="150">
+                </label>
+                <label>
+                    Lidar Angle: <span id="lidarAngleDisplay">120</span>
+                    <input type="range" id="lidarAngle" min="30" max="360" value="120">
+                </label>
+                <label>
+                    Heat Radius: <span id="heatRangeDisplay">100</span>
+                    <input type="range" id="heatRange" min="50" max="300" value="100">
+                </label>
+                <label>
+                    <input type="checkbox" id="sensorsToggle" checked>
+                    Show Sensors
+                </label>
+            </div>
+
+            <!-- Stats Panel Moved to Top -->
+        </aside>
+
+        <main class="viewport">
+            <!-- Canvas maintained at 1000x1000 for logic, but scaled via CSS to fit -->
+            <div class="canvas-wrapper">
+                <canvas id="simCanvas" width="1000" height="1000"></canvas>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts (Order is important for dependencies) -->
+    <script src="js/utils.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/robot.js"></script>
+    <script src="js/simulation.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
