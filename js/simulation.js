@@ -11,17 +11,16 @@ class Simulation {
         this.animationId = null;
 
         this.robotConfig = {
-            lidarRange: 150, // Updated per user request
-            lidarAngle: 120,
-            heatSensorRange: 100, // Updated per user request
+            lidarRange: 200,
+            lidarAngle: 45,
+            heatSensorRange: 80,
             showSensors: true
         };
     }
 
     spawnRobots(count) {
         if (!this.mapManager.robotStartPoint) {
-            alert("Please set a robot start point first!");
-            return;
+            return false;
         }
 
         this.robots = [];
@@ -36,10 +35,12 @@ class Simulation {
         }
         this.draw();
         this.updateStats();
+        return true;
     }
 
     start() {
         if (this.isRunning) return;
+        if (this.robots.length === 0) return; // Don't start if no robots
         this.isRunning = true;
         this.loop();
     }
@@ -57,11 +58,12 @@ class Simulation {
         // Don't clear entities. Just reset map state and robots.
         this.mapManager.resetMapState();
 
-        // Re-spawn robots at start point (clears their memory/state)
-        // Check if a specific count is requested, otherwise use existing.
-        const count = newCount !== undefined ? newCount : (this.robots.length || 1);
+        // Re-spawn robots at start point if it exists
         this.robots = [];
-        this.spawnRobots(count); // This puts them back at start with empty memory
+        if (this.mapManager.robotStartPoint) {
+            const count = newCount !== undefined ? newCount : 1;
+            this.spawnRobots(count);
+        }
 
         this.draw();
         this.updateStats();

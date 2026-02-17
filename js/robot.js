@@ -44,16 +44,12 @@ class Robot {
         // "robot should rotate on its axis till it points towards the survior"
         const locatedSurvivor = this.findNearbyLocatedSurvivor();
         if (locatedSurvivor) {
-            // Check if we are already facing it?
             const angleTo = Utils.angleTo(this, locatedSurvivor);
-            const diff = Math.abs(this.angle - angleTo); // Simple check
+            const diff = Math.abs(this.angle - angleTo);
+            const normalizedDiff = ((diff + 180) % 360) - 180;
 
-            // If significant difference, rotate.
-            // But if we are already facing it and it's still not 'saved' (e.g. wall), 
-            // we shouldn't get stuck. 
-            // Let's assume if we are facing it within tolerance, we proceed to move logic.
-
-            if (Math.abs((diff + 180) % 360 - 180) > 5) { // 5 degrees tolerance
+            // If not facing it, rotate.
+            if (Math.abs(normalizedDiff) > 5) {
                 this.targetPoint = { x: locatedSurvivor.x, y: locatedSurvivor.y, isSurvivor: true };
                 this.state = 'ROTATING';
                 console.log(`Robot ${this.id} rotating towards Located Survivor ${locatedSurvivor.id}`);
@@ -166,7 +162,11 @@ class Robot {
             this.angle = desiredAngle;
 
             if (this.targetPoint.isSurvivor) {
-                this.state = 'IDLE'; // Done looking, decide next move (scan again)
+                // We were rotating towards a survivor.
+                // Check if they are now saved? If so, we can resume.
+                // If not (maybe wall blocked?), we sit here for a bit?
+                // For simplicity, let's go back to IDLE so decideNextMove can re-evaluate.
+                this.state = 'IDLE';
                 this.targetPoint = null;
             } else {
                 this.state = 'MOVING';
@@ -227,29 +227,35 @@ class Robot {
 
     scanSensors() {
         // Feature 3 & 5: Heat (Located) vs Lidar (Saved)
-
         const heatRange = this.config.heatSensorRange;
         const lidarRange = this.config.lidarRange;
+        const lidarAngleHalf = Utils.degToRad(this.config.lidarAngle / 2);
 
         for (const s of this.mapManager.survivors) {
             if (s.status === 'saved') continue;
 
             const dist = Utils.distance(this, s);
 
-            // Check Heat (Locating) - Wall penetrating
-            // Logic Fix: Check this independently of Lidar line-of-sight
+            // 1. Check Heat (Locating) - Wall penetrating
+            // If waiting and within heat range, mark as located
             if (s.status === 'waiting' && dist <= heatRange) {
                 s.status = 'located';
                 console.log(`Survivor ${s.id} LOCATED by Robot ${this.id}`);
-                // Don't continue; we might also be able to save them in the same frame
             }
 
-            // Check Lidar (Saving) - Requires line of sight
-            if (dist <= lidarRange) {
-                const hasLineOfSight = this.mapManager.checkLineOfSight(this, s);
+            // 2. Check Lidar (Saving) - Requires line of sight AND being in the Lidar cone
+            if (s.status === 'located' && dist <= lidarRange) {
+                // Check if survivor is within the Lidar FOV (cone)
+                const angleToSurvivor = Utils.angleTo(this, s);
+                const diff = Utils.degToRad(angleToSurvivor - this.angle);
 
-                if (hasLineOfSight) {
-                    if (s.status !== 'saved') {
+                // Normalize angle diff to [-PI, PI]
+                let normalizedDiff = (diff + Math.PI) % (2 * Math.PI) - Math.PI;
+                if (normalizedDiff < -Math.PI) normalizedDiff += 2 * Math.PI;
+
+                if (Math.abs(normalizedDiff) <= lidarAngleHalf) {
+                    const hasLineOfSight = this.mapManager.checkLineOfSight(this, s);
+                    if (hasLineOfSight) {
                         s.status = 'saved';
                         this.foundSurvivors.add(s.id);
                         console.log(`Survivor ${s.id} SAVED by Robot ${this.id}`);

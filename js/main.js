@@ -164,45 +164,55 @@ document.getElementById('stepsPerUpdate').addEventListener('input', (e) => {
 document.getElementById('totalSteps').addEventListener('change', updateConfig);
 
 // Sim Controls
-document.getElementById('startSim').addEventListener('click', () => {
-    const count = parseInt(document.getElementById('robotCount').value);
-    // Safety: If count mismatches (e.g. user changed it but live update failed), respawn
-    if (simulation.robots.length !== count || simulation.robots.length === 0) {
-        simulation.robots = [];
-        simulation.spawnRobots(count);
+const toggleSimBtn = document.getElementById('toggleSim');
+
+toggleSimBtn.addEventListener('click', () => {
+    if (simulation.isRunning) {
+        // STOP
+        simulation.stop();
+        toggleSimBtn.textContent = "Start";
+        toggleSimBtn.classList.remove('btn-stop');
+        toggleSimBtn.classList.add('btn-start');
+    } else {
+        // START
+        const count = parseInt(document.getElementById('robotCount').value);
+        if (simulation.robots.length !== count || simulation.robots.length === 0) {
+            simulation.robots = [];
+            const success = simulation.spawnRobots(count);
+            if (!success) {
+                alert("Please set a robot start point first!");
+                return;
+            }
+        }
+        simulation.start();
+        toggleSimBtn.textContent = "Stop";
+        toggleSimBtn.classList.remove('btn-start');
+        toggleSimBtn.classList.add('btn-stop');
+
+        // Lock UI
+        document.getElementById('robotCount').disabled = true;
+        document.querySelectorAll('input[name="placementTool"]').forEach(r => r.disabled = true);
+        document.getElementById('clearEntities').disabled = true;
+        document.getElementById('mapUpload').disabled = true;
+        useDefaultMapBtn.disabled = true;
     }
-    simulation.start();
-    document.getElementById('startSim').disabled = true;
-    document.getElementById('stopSim').disabled = false;
-    document.getElementById('robotCount').disabled = true; // Lock Count
-
-    // Lock Placement Tools
-    document.querySelectorAll('input[name="placementTool"]').forEach(r => r.disabled = true);
-    document.getElementById('clearEntities').disabled = true; // Lock Clear
-    document.getElementById('mapUpload').disabled = true; // Lock Map Upload
-    useDefaultMapBtn.disabled = true; // Lock Default Map Button
-});
-
-document.getElementById('stopSim').addEventListener('click', () => {
-    simulation.stop();
-    document.getElementById('startSim').disabled = false;
-    document.getElementById('stopSim').disabled = true;
-    // Do NOT unlock robotCount here, as resume is possible without reset
-    // Do NOT unlock placement tools here either
 });
 
 document.getElementById('resetSim').addEventListener('click', () => {
     const count = parseInt(document.getElementById('robotCount').value);
     simulation.reset(count);
-    document.getElementById('startSim').disabled = false;
-    document.getElementById('stopSim').disabled = true;
-    document.getElementById('robotCount').disabled = false; // Unlock Count
 
-    // Unlock Placement Tools
+    // Reset Toggle Button
+    toggleSimBtn.textContent = "Start";
+    toggleSimBtn.classList.remove('btn-stop');
+    toggleSimBtn.classList.add('btn-start');
+
+    // Unlock UI
+    document.getElementById('robotCount').disabled = false;
     document.querySelectorAll('input[name="placementTool"]').forEach(r => r.disabled = false);
-    document.getElementById('clearEntities').disabled = false; // Unlock Clear
-    document.getElementById('mapUpload').disabled = false; // Unlock Map Upload
-    useDefaultMapBtn.disabled = false; // Unlock Default Map Button
+    document.getElementById('clearEntities').disabled = false;
+    document.getElementById('mapUpload').disabled = false;
+    useDefaultMapBtn.disabled = false;
 });
 
 // Initial Config

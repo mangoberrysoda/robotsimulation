@@ -338,22 +338,22 @@ button:disabled {
 }
 
 /* Specific Button Variants */
-#startSim {
+.btn-start {
     background: linear-gradient(135deg, #4CAF50, #45a049);
     color: white;
 }
 
-#startSim:hover:not(:disabled) {
+.btn-start:hover:not(:disabled) {
     background: linear-gradient(135deg, #5DBF61, #4CAF50);
     box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
 }
 
-#stopSim {
+.btn-stop {
     background: linear-gradient(135deg, #f44336, #d32f2f);
     color: white;
 }
 
-#stopSim:hover:not(:disabled) {
+.btn-stop:hover:not(:disabled) {
     background: linear-gradient(135deg, #ff5f52, #f44336);
     box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
 }
