@@ -319,6 +319,24 @@ button:disabled {
     box-shadow: none;
 }
 
+/* Layout Utilities */
+.input-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.mini {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+}
+
+.separator {
+    font-size: 0.8rem;
+    color: #888;
+    font-style: italic;
+}
+
 /* Specific Button Variants */
 #startSim {
     background: linear-gradient(135deg, #4CAF50, #45a049);
