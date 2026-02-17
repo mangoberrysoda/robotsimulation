@@ -9,6 +9,7 @@ const mapManager = new MapManager('simCanvas');
 // UI Elements
 // UI Elements
 const mapUpload = document.getElementById('mapUpload');
+const useDefaultMapBtn = document.getElementById('useDefaultMap');
 const canvas = document.getElementById('simCanvas');
 const clearBtn = document.getElementById('clearEntities');
 const simStatus = document.getElementById('simStatus');
@@ -56,6 +57,20 @@ mapUpload.addEventListener('change', (e) => {
             })
             .catch(err => console.error("Error loading map:", err));
     }
+});
+
+useDefaultMapBtn.addEventListener('click', () => {
+    mapUpload.value = null; // Immediate reset for UI consistency
+
+    mapManager.loadFromUrl('maps/obstacle-map.png')
+        .then(() => {
+            simStatus.textContent = "Default Map Loaded";
+            console.log("Default map loaded successfully");
+            mapManager.clearEntities();
+            simulation.reset();
+            simulation.robots = [];
+        })
+        .catch(err => alert("Failed to load default map."));
 });
 
 // Radio buttons for tools
@@ -165,6 +180,7 @@ document.getElementById('startSim').addEventListener('click', () => {
     document.querySelectorAll('input[name="placementTool"]').forEach(r => r.disabled = true);
     document.getElementById('clearEntities').disabled = true; // Lock Clear
     document.getElementById('mapUpload').disabled = true; // Lock Map Upload
+    useDefaultMapBtn.disabled = true; // Lock Default Map Button
 });
 
 document.getElementById('stopSim').addEventListener('click', () => {
@@ -186,6 +202,7 @@ document.getElementById('resetSim').addEventListener('click', () => {
     document.querySelectorAll('input[name="placementTool"]').forEach(r => r.disabled = false);
     document.getElementById('clearEntities').disabled = false; // Unlock Clear
     document.getElementById('mapUpload').disabled = false; // Unlock Map Upload
+    useDefaultMapBtn.disabled = false; // Unlock Default Map Button
 });
 
 // Initial Config

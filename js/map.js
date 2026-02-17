@@ -63,6 +63,24 @@ class MapManager {
         });
     }
 
+    // Load image from URL
+    loadFromUrl(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                this.bgImage = img;
+                this.processMapData();
+                this.render();
+                resolve();
+            };
+            img.onerror = (err) => {
+                console.error("Failed to load image from URL:", url, err);
+                reject(err);
+            };
+            img.src = url;
+        });
+    }
+
     // Analyze pixel data to mark obstacles
     processMapData() {
         // Draw image to canvas temporarily to read pixels
