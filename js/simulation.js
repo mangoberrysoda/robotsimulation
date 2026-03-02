@@ -1,7 +1,7 @@
 class Simulation {
     constructor(mapManager, uiCallbacks) {
         this.mapManager = mapManager;
-        this.uiCallbacks = uiCallbacks; // { updateStats: (data) => {} }
+        this.uiCallbacks = uiCallbacks; // { updateStats: (data) => {}, onComplete: (reason) => {} }
 
         this.robots = [];
         this.isRunning = false;
@@ -95,11 +95,38 @@ class Simulation {
             for (let i = 0; i < this.stepsPerUpdate; i++) {
                 if (this.stepCount >= this.totalSteps) {
                     this.stop();
-                    alert("Simulation Complete: Total Steps Reached");
+                    this.mapManager.highlightUncleaned = true;
+                    this.draw();
+                    this.updateStats();
+                    if (this.uiCallbacks.onComplete) this.uiCallbacks.onComplete("Total Steps Reached");
+                    setTimeout(() => alert("Simulation Complete: Total Steps Reached"), 0);
                     return;
                 }
 
                 this.step();
+            }
+
+            // Check for 100% map coverage (round to 1dp to match what the display shows)
+            const coverage = parseFloat(this.computeCoverage().toFixed(1));
+            if (coverage >= 100) {
+                this.stop();
+                this.mapManager.highlightUncleaned = true;
+                this.draw();
+                this.updateStats();
+                if (this.uiCallbacks.onComplete) this.uiCallbacks.onComplete("100% Coverage Reached");
+                setTimeout(() => alert("Simulation Complete: 100% Map Coverage Achieved!"), 0);
+                return;
+            }
+
+            // Check if all robots have returned to start (FINISHED state)
+            if (this.robots.length > 0 && this.robots.every(r => r.state === 'FINISHED')) {
+                this.stop();
+                this.mapManager.highlightUncleaned = true;
+                this.draw();
+                this.updateStats();
+                if (this.uiCallbacks.onComplete) this.uiCallbacks.onComplete("All Robots Returned");
+                setTimeout(() => alert("Simulation Complete: All Robots Have Returned to Start!"), 0);
+                return;
             }
 
             this.draw();
@@ -125,12 +152,9 @@ class Simulation {
         this.robots.forEach(r => r.update(this.stepCount));
     }
 
-    updateStats() {
-        // Calculate Coverage
+    computeCoverage() {
         let visitedCount = 0;
         let totalCount = 0;
-
-        // Roughly count grid points (optimization: cache total)
         for (let row of this.mapManager.grid) {
             for (let p of row) {
                 if (!p.isObstacle) {
@@ -139,8 +163,24 @@ class Simulation {
                 }
             }
         }
+        return totalCount > 0 ? (visitedCount / totalCount) * 100 : 0;
+    }
 
-        const coverage = totalCount > 0 ? ((visitedCount / totalCount) * 100).toFixed(1) : 0;
+    computeFreeAreaPercent() {
+        let freeCount = 0;
+        let totalCount = 0;
+        for (let row of this.mapManager.grid) {
+            for (let p of row) {
+                totalCount++;
+                if (!p.isObstacle) freeCount++;
+            }
+        }
+        return totalCount > 0 ? ((freeCount / totalCount) * 100).toFixed(1) : '0.0';
+    }
+
+    updateStats() {
+        const coverage = this.computeCoverage().toFixed(1);
+        const freeArea = this.computeFreeAreaPercent();
 
         const survivorsSaved = this.mapManager.survivors.filter(s => s.status === 'saved').length;
         // User Request: "The count of 'saved' should be a subset of 'located'"
@@ -148,13 +188,21 @@ class Simulation {
         const survivorsLocatedCount = this.mapManager.survivors.filter(s => s.status === 'located').length;
         const totalLocated = survivorsLocatedCount + survivorsSaved;
 
+        const robotMappedPoints = this.robots.map(r => ({
+            id: r.id,
+            color: r.color,
+            count: r.visitedPoints.size
+        }));
+
         this.uiCallbacks.updateStats({
             status: this.isRunning ? "Running" : "Idle",
             activeRobots: this.robots.length,
-            coverage: coverage, // Just raw number/string
+            coverage: coverage,
+            freeArea: freeArea,
             survivorsSaved: `${survivorsSaved} / ${this.mapManager.survivors.length}`,
             survivorsLocated: `${totalLocated} / ${this.mapManager.survivors.length}`,
-            steps: this.stepCount
+            steps: this.stepCount,
+            robotMappedPoints
         });
     }
 

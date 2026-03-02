@@ -65,10 +65,23 @@ This log preserves the complete chronological history of the Robotics Simulation
     - [x] Improved contrast for Stats widget.
     - [x] Speed Slider (FPS Control) implementation.
     - [x] Professional button styles & compact UI spacing.
-- **Phase 29: Final Bug Fixes**
-    - [x] Fix Robot Count sync on reset.
-    - [x] Auto-clear entities on new map upload.
-    - [x] Fix Lock/Unlock logic for Upload and Clear buttons.
+- **Phase 30: Automation & Refinement**
+    - [x] **Intelligent Auto-Stop**: Halts on 100% coverage, step limit, or all robots returning home.
+    - [x] **Interactive Settings**: Bidirectional sync between sliders and editable number inputs.
+    - [x] **Expanded Fleet**: Support for up to 20 robots simultaneously.
+    - [x] **Advanced Stats**: Added "Free Area %" and individual robot "Mapped Points" tracking.
+    - [x] **Missed Area Highlighting**: Uncleaned traversable areas highlighted in **Orange** on end.
+    - [x] **Efficiency Fix**: Reduced map boundary padding from 2 cells to 1.
+- **Phase 31: Professional Support & HUD**
+    - [x] **Integrated Help Guide**: Created HTML-based user manual (`help.html`).
+    - [x] **UI HUD Entry**: Persistent help trigger next to app title.
+    - [x] **Extended Repository**: Generated Roadmap, Troubleshooting, and Architecture Deep Dive docs.
+- **Phase 32: Professional UI Finalization (Latest)**
+    - [x] **Semantic Fix**: Switched header to `<header>` to resolve `nth-of-type` CSS conflicts.
+    - [x] **Placement Polish**: Replaced radio buttons with side-by-side **Toggle Buttons**.
+    - [x] **Layout Refinement**: Fixed widget order (Simulation under Settings, Stats on right).
+    - [x] **Aesthetic Optimization**: Reduced button padding and adjusted canvas scaling (100% width).
+    - [x] **Full Sync**: Updated all repository documentation for Release 1.6.
 
 ---
-**Current Status**: Complete / Version 1.1 Documentation Synchronized.
+**Current Status**: Complete / Version 1.6 Documentation Synchronized.

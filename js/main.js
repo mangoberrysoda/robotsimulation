@@ -21,6 +21,8 @@ const coverageText = document.getElementById('coverageText');
 const survivorsLocatedEl = document.getElementById('survivorsLocated');
 const survivorsSavedEl = document.getElementById('survivorsSaved');
 const stepCountEl = document.getElementById('stepCount');
+const freeAreaEl = document.getElementById('freeArea');
+const robotMappedTableEl = document.getElementById('robotMappedTable');
 
 // Initialize Simulation
 const simulation = new Simulation(mapManager, {
@@ -33,9 +35,35 @@ const simulation = new Simulation(mapManager, {
         if (coverageBar) coverageBar.style.width = coverageVal + "%";
         if (coverageText) coverageText.textContent = coverageVal + "%";
 
+        if (freeAreaEl) freeAreaEl.textContent = data.freeArea + "%";
+
         survivorsLocatedEl.textContent = data.survivorsLocated;
         survivorsSavedEl.textContent = data.survivorsSaved;
         stepCountEl.textContent = data.steps;
+
+        // Per-robot mapped points table
+        if (robotMappedTableEl && data.robotMappedPoints) {
+            robotMappedTableEl.innerHTML = data.robotMappedPoints
+                .map(r => `<div class="robot-mapped-row">
+                    <span class="robot-dot" style="background:${r.color}"></span>
+                    <span class="robot-label">R${r.id}</span>
+                    <span class="robot-count">${r.count} pts</span>
+                </div>`)
+                .join('');
+        }
+    },
+    onComplete: (_reason) => {
+        // Reset toggle button to "Start" state
+        toggleSimBtn.textContent = "Start";
+        toggleSimBtn.classList.remove('btn-stop');
+        toggleSimBtn.classList.add('btn-start');
+
+        // Unlock UI controls
+        document.getElementById('robotCount').disabled = false;
+        document.querySelectorAll('.toggle-btn').forEach(btn => btn.disabled = false);
+        document.getElementById('clearEntities').disabled = false;
+        document.getElementById('mapUpload').disabled = false;
+        useDefaultMapBtn.disabled = false;
     }
 });
 
@@ -73,10 +101,13 @@ useDefaultMapBtn.addEventListener('click', () => {
         .catch(err => alert("Failed to load default map."));
 });
 
-// Radio buttons for tools
-document.querySelectorAll('input[name="placementTool"]').forEach(radio => {
-    radio.addEventListener('change', (e) => {
-        currentTool = e.target.value;
+// Toggle buttons for tools
+const toolBtns = document.querySelectorAll('.toggle-btn');
+toolBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        currentTool = btn.dataset.tool;
+        toolBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
         console.log("Tool switched to:", currentTool);
     });
 });
@@ -136,31 +167,57 @@ const updateConfig = () => {
 
 
 
+// Helper: wire a number-input display ↔ range slider pair
+function linkSliderNum(sliderId, numId, onChange) {
+    const slider = document.getElementById(sliderId);
+    const num = document.getElementById(numId);
+
+    // slider → number
+    slider.addEventListener('input', () => {
+        num.value = slider.value;
+        if (onChange) onChange();
+    });
+
+    // number → slider (on change/blur, clamp to min/max)
+    const syncFromNum = () => {
+        let v = parseInt(num.value);
+        const lo = parseInt(num.min), hi = parseInt(num.max);
+        if (isNaN(v)) v = parseInt(slider.value);
+        v = Math.max(lo, Math.min(hi, v));
+        num.value = v;
+        slider.value = v;
+        if (onChange) onChange();
+    };
+    num.addEventListener('change', syncFromNum);
+    num.addEventListener('blur', syncFromNum);
+}
+
 document.getElementById('robotCount').addEventListener('input', (e) => {
-    document.getElementById('robotCountDisplay').textContent = e.target.value;
-    // Don't restart, just update config for next spawn
+    document.getElementById('robotCountDisplay').value = e.target.value;
 });
-document.getElementById('lidarRange').addEventListener('input', (e) => {
-    document.getElementById('lidarRangeDisplay').textContent = e.target.value;
-    updateConfig();
-});
-document.getElementById('lidarAngle').addEventListener('input', (e) => {
-    document.getElementById('lidarAngleDisplay').textContent = e.target.value;
-    updateConfig();
-});
-document.getElementById('heatRange').addEventListener('input', (e) => {
-    document.getElementById('heatRangeDisplay').textContent = e.target.value;
-    updateConfig();
-});
+// Reverse: robotCountDisplay → robotCount
+(function () {
+    const num = document.getElementById('robotCountDisplay');
+    const slider = document.getElementById('robotCount');
+    const sync = () => {
+        let v = parseInt(num.value);
+        const lo = parseInt(num.min), hi = parseInt(num.max);
+        if (isNaN(v)) v = parseInt(slider.value);
+        v = Math.max(lo, Math.min(hi, v));
+        num.value = v;
+        slider.value = v;
+    };
+    num.addEventListener('change', sync);
+    num.addEventListener('blur', sync);
+})();
+
+linkSliderNum('lidarRange', 'lidarRangeDisplay', updateConfig);
+linkSliderNum('lidarAngle', 'lidarAngleDisplay', updateConfig);
+linkSliderNum('heatRange', 'heatRangeDisplay', updateConfig);
+linkSliderNum('simSpeed', 'simSpeedDisplay', updateConfig);
+linkSliderNum('stepsPerUpdate', 'stepsPerUpdateDisplay', updateConfig);
+
 document.getElementById('sensorsToggle').addEventListener('change', updateConfig);
-document.getElementById('simSpeed').addEventListener('input', (e) => {
-    document.getElementById('simSpeedDisplay').textContent = e.target.value;
-    updateConfig();
-});
-document.getElementById('stepsPerUpdate').addEventListener('input', (e) => {
-    document.getElementById('stepsPerUpdateDisplay').textContent = e.target.value;
-    updateConfig();
-});
 document.getElementById('totalSteps').addEventListener('change', updateConfig);
 
 // Sim Controls
@@ -191,7 +248,7 @@ toggleSimBtn.addEventListener('click', () => {
 
         // Lock UI
         document.getElementById('robotCount').disabled = true;
-        document.querySelectorAll('input[name="placementTool"]').forEach(r => r.disabled = true);
+        document.querySelectorAll('.toggle-btn').forEach(btn => btn.disabled = true);
         document.getElementById('clearEntities').disabled = true;
         document.getElementById('mapUpload').disabled = true;
         useDefaultMapBtn.disabled = true;
@@ -209,7 +266,7 @@ document.getElementById('resetSim').addEventListener('click', () => {
 
     // Unlock UI
     document.getElementById('robotCount').disabled = false;
-    document.querySelectorAll('input[name="placementTool"]').forEach(r => r.disabled = false);
+    document.querySelectorAll('.toggle-btn').forEach(btn => btn.disabled = false);
     document.getElementById('clearEntities').disabled = false;
     document.getElementById('mapUpload').disabled = false;
     useDefaultMapBtn.disabled = false;

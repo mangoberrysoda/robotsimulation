@@ -12,9 +12,78 @@
     <div class="app-container">
         <!-- Left Panel: User Inputs (50%) -->
         <aside class="controls-area">
-            <h1>Search & Rescue</h1>
+            <header class="header-with-help">
+                <h1>Search & Rescue</h1>
+                <a href="help.html" class="help-icon" title="View Help Guide">?</a>
+            </header>
 
-            <!-- 1. Live Stats (Now a widget) -->
+            <div class="control-group">
+                <h2>Map</h2>
+                <div class="input-row">
+                    <input type="file" id="mapUpload" accept="image/*">
+                    <span class="separator">or</span>
+                    <button id="useDefaultMap" class="secondary mini">Use Default</button>
+                </div>
+                <p class="hint">Dark areas = Obstacles</p>
+            </div>
+
+            <div class="control-group">
+                <h2>Placement</h2>
+                <div class="toggle-group">
+                    <button id="toolSurvivor" class="toggle-btn active" data-tool="survivor">Survivors</button>
+                    <button id="toolRobot" class="toggle-btn" data-tool="robot">Robots (Start)</button>
+                </div>
+                <button id="clearEntities">Clear All</button>
+            </div>
+
+            <div class="control-group">
+                <h2>Robot Settings</h2>
+                <label>
+                    Count: <input type="number" id="robotCountDisplay" class="slider-num" min="1" max="20" value="1">
+                    <input type="range" id="robotCount" min="1" max="20" value="1">
+                </label>
+                <label>
+                    Lidar Range: <input type="number" id="lidarRangeDisplay" class="slider-num" min="50" max="300"
+                        value="200">
+                    <input type="range" id="lidarRange" min="50" max="300" value="200">
+                </label>
+                <label>
+                    Lidar Angle: <input type="number" id="lidarAngleDisplay" class="slider-num" min="30" max="360"
+                        value="45">
+                    <input type="range" id="lidarAngle" min="30" max="360" value="45">
+                </label>
+                <label>
+                    Heat Radius: <input type="number" id="heatRangeDisplay" class="slider-num" min="50" max="300"
+                        value="80">
+                    <input type="range" id="heatRange" min="50" max="300" value="80">
+                </label>
+                <label>
+                    <input type="checkbox" id="sensorsToggle" checked>
+                    Show Sensors
+                </label>
+            </div>
+
+            <div class="control-group">
+                <h2>Simulation</h2>
+                <label>
+                    Speed (FPS): <input type="number" id="simSpeedDisplay" class="slider-num" min="1" max="60"
+                        value="60">
+                    <input type="range" id="simSpeed" min="1" max="60" value="60">
+                </label>
+                <label>
+                    Steps/Update: <input type="number" id="stepsPerUpdateDisplay" class="slider-num" min="1" max="50"
+                        value="5">
+                    <input type="range" id="stepsPerUpdate" min="1" max="50" value="5">
+                </label>
+                <label>
+                    Total Steps: <input type="number" id="totalSteps" value="10000">
+                </label>
+                <div class="button-row">
+                    <button id="toggleSim" class="btn-start">Start</button>
+                    <button id="resetSim" class="danger">Reset</button>
+                </div>
+            </div>
+
             <div class="control-group stats-widget">
                 <h2>Live Stats</h2>
                 <div class="stats-grid">
@@ -25,6 +94,10 @@
                     <div class="stat-item">
                         <span>Active Robots:</span>
                         <span id="activeRobots">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Free Area:</span>
+                        <span id="freeArea">—%</span>
                     </div>
                     <div class="stat-item">
                         <span>Cleaned Area:</span>
@@ -45,79 +118,12 @@
                         <span>Steps:</span>
                         <span id="stepCount">0</span>
                     </div>
+                    <div class="stat-item stat-item--col">
+                        <span>Mapped Points / Robot:</span>
+                        <div id="robotMappedTable" class="robot-mapped-table"></div>
+                    </div>
                 </div>
             </div>
-
-            <div class="control-group">
-                <h2>Map</h2>
-                <div class="input-row">
-                    <input type="file" id="mapUpload" accept="image/*">
-                    <span class="separator">or</span>
-                    <button id="useDefaultMap" class="secondary mini">Use Default</button>
-                </div>
-                <p class="hint">Dark areas = Obstacles</p>
-            </div>
-
-            <div class="control-group">
-                <h2>Placement</h2>
-                <div class="radio-group">
-                    <label>
-                        <input type="radio" name="placementTool" value="survivor" checked>
-                        Place Survivors
-                    </label>
-                    <label>
-                        <input type="radio" name="placementTool" value="robot">
-                        Place Robots (Start)
-                    </label>
-                </div>
-                <button id="clearEntities">Clear All</button>
-            </div>
-
-            <!-- Reordered: Simulation above Robot Settings -->
-            <div class="control-group">
-                <h2>Simulation</h2>
-                <label>
-                    Speed (FPS): <span id="simSpeedDisplay">60</span>
-                    <input type="range" id="simSpeed" min="1" max="60" value="60">
-                </label>
-                <label>
-                    Steps/Update: <span id="stepsPerUpdateDisplay">5</span>
-                    <input type="range" id="stepsPerUpdate" min="1" max="50" value="5">
-                </label>
-                <label>
-                    Total Steps: <input type="number" id="totalSteps" value="10000">
-                </label>
-                <div class="button-row">
-                    <button id="toggleSim" class="btn-start">Start</button>
-                    <button id="resetSim" class="danger">Reset</button>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <h2>Robot Settings</h2>
-                <label>
-                    Count: <span id="robotCountDisplay">1</span>
-                    <input type="range" id="robotCount" min="1" max="10" value="1">
-                </label>
-                <label>
-                    Lidar Range: <span id="lidarRangeDisplay">200</span>
-                    <input type="range" id="lidarRange" min="50" max="300" value="200">
-                </label>
-                <label>
-                    Lidar Angle: <span id="lidarAngleDisplay">45</span>
-                    <input type="range" id="lidarAngle" min="30" max="360" value="45">
-                </label>
-                <label>
-                    Heat Radius: <span id="heatRangeDisplay">80</span>
-                    <input type="range" id="heatRange" min="50" max="300" value="80">
-                </label>
-                <label>
-                    <input type="checkbox" id="sensorsToggle" checked>
-                    Show Sensors
-                </label>
-            </div>
-
-            <!-- Stats Panel Moved to Top -->
         </aside>
 
         <main class="viewport">

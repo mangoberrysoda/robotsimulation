@@ -16,7 +16,8 @@ Build a high-performance web-based simulation environment for multi-robot search
 ### Data Model
 - **Grid Cell**: `{ x, y, isObstacle, visited, ownerId }`
 - **Survivor**: `{ id, x, y, status: ['waiting', 'located', 'saved'] }`
-- **Robot Config**: `{ lidarRange, lidarAngle, heatRadius, showSensors }`
+- **Robot Config**: `{ lidarRange, lidarAngle, heatRadius, showSensors, robotCount }`
+- **Global Settings**: `{ highlightUncleaned, freeAreaPercentage, perRobotStats }`
 
 ## 3. Implementation Phases
 
@@ -44,14 +45,26 @@ Build a high-performance web-based simulation environment for multi-robot search
 2. Build a responsive "Live Stats" widget using Flexbox.
 3. Add simulation speed controls (1-60 FPS) and intensity scalers (Steps/Update).
 
+### Phase 5: Automation & Refinement
+1. **Intelligent Stop**: Trigger onComplete callback when coverage=100%, robots=FINISHED, or steps=max.
+2. **Bidirectional Sync**: Link range input `input` to number input `value` and vice versa with clamping.
+3. **Advanced Display**: Render the map's uncleaned free area in Orange on stop.
+
+### Phase 6: Professional Support HUD
+1. **Dynamic Documentation**: Generate formatted HTML from Markdown guides for contextual help.
+2. **HUD Trigger**: Implement a CSS-styled absolute-positioned `?` icon in the main layout header.
+
 ## 4. Verification Plan
 
 ### Automated/Logic Testing
-- [ ] Verify LoS logic returns `false` when a ray hits an `isObstacle` cell.
-- [ ] Ensure `coverage %` increases correctly as robots move.
-- [ ] Validate that "Saved" count can never exceed "Located" count.
+- [x] Verify LoS logic returns `false` when a ray hits an `isObstacle` cell.
+- [x] Ensure `coverage %` increases correctly as robots move.
+- [x] Validate that "Saved" count can never exceed "Located" count.
+- [x] Confirm `auto-stop` triggers and unlocks UI correctly.
 
 ### Visual Verification
-- [ ] Observe Lidar cone clipping against obstacles.
-- [ ] Verify robot rotation aligns perfectly with the target heading before movement starts.
-- [ ] Monitor UI responsiveness under 60FPS / 50 steps-per-update load.
+- [x] Observe Lidar cone clipping against obstacles.
+- [x] Verify robot rotation aligns perfectly with the target heading before movement starts.
+- [x] Monitor UI responsiveness under 60FPS / 50 steps-per-update load.
+- [x] Confirm orange highlighting of unvisited cells on simulation halt.
+- [x] Verify Help HUD icon properly routes to `help.html`.

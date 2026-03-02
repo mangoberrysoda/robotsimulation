@@ -23,7 +23,9 @@ This project is a web-based simulation where autonomous robots explore an unknow
     -   **Loop Control**: Manages the `requestAnimationFrame` loop with FPS throttling (User-controlled speed).
     -   **Batch Processing**: Executes `N` simulation steps per frame render to speed up simulation time.
     -   **Entity Management**: Handles spawning and resetting of robots.
-    -   **Stats Aggregation**: Calculates coverage %, active robots, and survivor statuses for the UI.
+    - **Stats Aggregation**: Calculates coverage %, active robots, free area %, and per-robot mapped point counts.
+    - **Auto-Stop Logic**: Halts when coverage reaches 100%, all robots return to base (`FINISHED` state), or step limit is reached.
+    - **Visual Feedback**: Triggers "Highlight Uncleaned" mode on map on stop.
 
 3.  **`Robot` (robot.js)**:
     -   **State Machine**: `IDLE` → `SCANNING` → `ROTATING` → `MOVING` → `COMPLETE` (or `FINISHED` when done).
@@ -37,6 +39,8 @@ This project is a web-based simulation where autonomous robots explore an unknow
 
 4.  **`Main` (main.js) & UI**:
     -   Handles DOM events, file uploads, and updates the "Live Stats" widget.
+    -   **Interactive Controls**: Implements bidirectional sync between range sliders and numerical inputs for all settings.
+    -   **Help HUD**: Integrated `help.html` accessible via a persistent UI trigger for user guidance.
 
 ### 3.2. Data Structures
 -   **Survivor State**:
@@ -47,23 +51,23 @@ This project is a web-based simulation where autonomous robots explore an unknow
     -   Adjustable Lidar Range & Angle.
     -   Adjustable Heat Sensor Radius.
 
-## 4. Current Features
+## Implementation Details
+- **Current Version**: 1.6 (Final UI Layout)
+- **Primary Tech**: HTML5, CSS3, Vanilla JavaScript
+- **Core Methodology**: Pure procedural simulation with grid-based state synchronization.
 
-### Phase 1: Map & Setup (Completed)
--   [x] Image Upload: Dark areas recognized as obstacles.
--   [x] Grid Overlay: 10px resolution.
--   [x] Edge Padding: Robots avoid the absolute edge of the map.
-
-### Phase 2: Entity Placement (Completed)
--   [x] **Place Survivors**: User clicks to deploy survivors.
--   [x] **Place Robots**: User sets a single "Start Point" for all robots.
--   [x] **Clear/Reset**: Options to clear entities or just reset the simulation state.
-
-### Phase 3: Robot Logic (Completed)
--   [x] **Movement**: Smooth rotation and pixel-based movement.
+## Features & Progress (v1.6)
+- [x] **Intelligent Auto-Stop**: Halts on 100% coverage, step limit, or all robots returning home.
+- [x] **Interactive Settings**: Bidirectional sync between sliders and editable number inputs.
+- [x] **Final 2-Column Sidebar**: Map and Placement at top, Simulation below Robot Settings, and Live Stats spanning the right column.
+- [x] **Placement Toggle Buttons**: High-performance side-by-side selection tool (Survivors vs Robots).
+- [x] **Help System**: Professional documentation with integrated **Header Icon** HUD access (Semantic Header Fix).
+- [x] **Expanded Fleet**: Support for up to 20 robots simultaneously.
+- [x] **Missed Area Highlighting**: Uncleaned traversable areas highlighted in Orange on end.
 -   [x] **Collision Avoidance**: Line-of-sight checks prevent moving through walls.
--   [x] **Coordination**: Shared "Visited" grid preventing robots from re-exploring the same tiles redundantly.
--   [x] **Backtracking**: Robots retrace their steps when no new path is found.
+-   [x] Coordination: Shared "Visited" grid preventing robots from re-exploring the same tiles redundantly.
+-   [x] Backtracking: Robots retrace their steps when no new path is found.
+-   [x] **Auto-Return**: Robots automatically switch to FINISHED state upon returning to start point after full exploration.
 
 ### Phase 4: Sensors & Visualization (Completed)
 -   [x] **Lidar Visualization**: Raycast cone drawn in yellow/transparent.
@@ -74,17 +78,21 @@ This project is a web-based simulation where autonomous robots explore an unknow
 -   [x] **Live Stats Widget**:
     -   Status (Idle/Running).
     -   Active Robots count.
+    -   Free Area % (Static map openness).
     -   Cleaned Area (Progress Bar).
     -   Survivors Located vs Saved counts.
     -   Total Steps.
+    -   Per-Robot Mapped Points table.
 -   [x] **Simulation Controls**:
-    -   Speed (FPS) slider (1-60).
-    -   Steps Per Update slider (1-50).
-    -   Robot Count slider (1-10).
+    -   Speed (FPS) slider + manual number input.
+    -   Steps Per Update slider + manual number input.
+    -   Robot Count slider (1-20) + manual number input.
+-   [x] **Help System**: Professional integrated help guide (`help.html`) with UI icon trigger.
 -   [x] **Sensor Config**: Toggle visibility, adjust ranges.
 
 ## 5. File Structure
 -   `/index.html`: Main UI layout with Control Panel and Canvas.
+-   `/help.html`: Integrated professional user guide.
 -   `/css/style.css`: Dark-themed styling for controls and stats.
 -   `/js/main.js`: Entry point and event listeners.
 -   `/js/map.js`: Map processing, grid logic, rendering.

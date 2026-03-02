@@ -9,6 +9,7 @@ class MapManager {
         this.bgImage = null; // The uploaded map image
         this.grid = []; // 2D array of grid points: { x, y, isObstacle, visited, ownerId }
         this.gridSpacing = 10;
+        this.highlightUncleaned = false; // When true, unvisited free cells are shown in yellow
 
         // Survivors (List of {x, y, id, status})
         this.survivors = [];
@@ -24,7 +25,7 @@ class MapManager {
         this.grid = [];
         const cols = this.width / this.gridSpacing;
         const rows = this.height / this.gridSpacing;
-        const padding = 2; // Fixed padding (20px)
+        const padding = 1; // Fixed padding (10px)
 
         for (let y = 0; y < rows; y++) {
             let row = [];
@@ -115,7 +116,7 @@ class MapManager {
         }
 
         const data = imageData.data;
-        const padding = 2; // skip edge points
+        const padding = 1; // skip edge points
         const cols = this.width / this.gridSpacing;
         const rows = this.height / this.gridSpacing;
 
@@ -245,6 +246,7 @@ class MapManager {
     }
 
     resetMapState() {
+        this.highlightUncleaned = false;
         for (let row of this.grid) {
             for (let p of row) {
                 p.visited = false;
@@ -273,6 +275,10 @@ class MapManager {
                     this.ctx.fillRect(p.x - 2, p.y - 2, 4, 4);
                 } else if (p.visited) {
                     this.ctx.fillStyle = 'rgba(0, 255, 0, 0.2)';
+                    this.ctx.fillRect(p.x - 5, p.y - 5, 10, 10);
+                } else if (this.highlightUncleaned) {
+                    // Highlight uncleaned reachable cells in bright yellow
+                    this.ctx.fillStyle = 'rgba(255, 140, 0, 1.0)';
                     this.ctx.fillRect(p.x - 5, p.y - 5, 10, 10);
                 }
             }

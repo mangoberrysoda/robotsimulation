@@ -1,4 +1,4 @@
-# Walkthrough - Survivor Detection & Map Fixes
+# Walkthrough - Integrated Help & Documentation (v1.4)
 
 I've refined the search and rescue logic to be more realistic and resolved the critical Lidar detection issues.
 
@@ -13,11 +13,28 @@ I've refined the search and rescue logic to be more realistic and resolved the c
 - **Physical Survivors**: Survivors now act as solid obstacles that block Lidar rays and cast shadows.
 - **Self-Obstruction Fix**: Added a 15px 'safe zone' around the robot center to prevent sensor self-blocking.
 
-### 3. "Locate -> Rotate -> Save" Workflow
-- **Heat Mapping**: Robots locate survivors through walls using heat (orange status).
-- **Target Rotation**: Robots prioritize rotating toward the located survivor before saving.
-- **Lidar Verification**: A survivor is only "Saved" (green status) if the robot is facing them and has a clear Lidar line-of-sight.
+### 4. Interactive Automation
+- **Intelligent Stop**: The simulation now halts automatically when 100% of the map is cleaned, all robots have returned to base, or the step limit is reached.
+- **Bidirectional Settings**: All range sliders are now paired with editable number inputs for precise control.
+- **Orange Highlight**: If the simulation stops with uncleaned areas, they are highlighted in **Bright Orange** (100% opacity) for instant visibility of missed zones.
+- **Expanded Analytics**:
+    - **Free Area %**: Displays the total traversable percentage of the current map.
+    - **Per-Robot Mapping**: Tracks the unique number of grid points explored by each individual agent.
+
+### 5. Efficiency Improvements
+- **Reduced Boundary Padding**: Boundary padding was reduced from 20px to 10px (1 cell), giving robots more room to navigate tight edges.
+- **Increased Capacity**: The system now supports up to **20 robots** simultaneously.
+
+### 6. Professional Guidance System
+- **Integrated Help HUD**: A new `?` icon in the main header links to a professional, dark-themed `help.html` guide.
+- **Extended Documentation**: Comprehensive project records are now bundled:
+    - **User Guide**: Step-by-step operational manual.
+    - **Roadmap**: Vision for v2.0 and swarm intelligence.
+    - **Architecture Deep Dive**: Explanation of Raycasting and Grid sampling math.
+    - **Troubleshooting**: Solution to common browser and rendering issues.
 
 ## Verification
-- **Debug Dots**: Red dots on the map confirm where the robot "sees" obstacles.
 - **Sequence**: Robots correctly transition from searching to rotating to saving.
+- **Auto-Stop**: Confirmed alerts and control unlocking upon reaching completion triggers.
+- **Sync**: Number inputs correctly clamp to valid ranges and update sliders in real-time.
+- **Navigation**: Verified the Help icon opens the professional guide in a new tab without interrupting simulation state.
