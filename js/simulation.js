@@ -191,8 +191,11 @@ class Simulation {
         const robotMappedPoints = this.robots.map(r => ({
             id: r.id,
             color: r.color,
-            count: r.visitedPoints.size
+            count: r.visitedPoints.size,
+            steps: r.steps
         }));
+
+        const totalRobotSteps = this.robots.reduce((acc, r) => acc + r.steps, 0);
 
         this.uiCallbacks.updateStats({
             status: this.isRunning ? "Running" : "Idle",
@@ -202,6 +205,7 @@ class Simulation {
             survivorsSaved: `${survivorsSaved} / ${this.mapManager.survivors.length}`,
             survivorsLocated: `${totalLocated} / ${this.mapManager.survivors.length}`,
             steps: this.stepCount,
+            totalRobotSteps: totalRobotSteps,
             robotMappedPoints
         });
     }

@@ -37,6 +37,7 @@ body {
     grid-template-columns: 1fr 1fr;
     /* Two columns for content */
     align-content: start;
+    align-items: start;
     gap: 15px;
     overflow-y: auto;
     z-index: 10;
@@ -177,34 +178,10 @@ header.header-with-help {
    5. Live Stats
 */
 
-/* Map (1st DIV) - Top Left */
-.control-group:nth-of-type(1) {
-    grid-column: 1;
-    grid-row: 2;
-}
-
-/* Placement (2nd DIV) - Top Right */
-.control-group:nth-of-type(2) {
-    grid-column: 2;
-    grid-row: 2;
-}
-
-/* Robot Settings (3rd DIV) - Mid Left */
-.control-group:nth-of-type(3) {
-    grid-column: 1;
-    grid-row: 3;
-}
-
-/* Simulation (4th DIV) - Bottom Left */
-.control-group:nth-of-type(4) {
-    grid-column: 1;
-    grid-row: 4;
-}
-
-/* Stats (5th DIV) - Mid+Bottom Right (Spans rows 3 & 4) */
-.control-group:nth-of-type(5) {
-    grid-column: 2;
-    grid-row: 3 / span 2;
+.control-col {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
 /* Toggle Group for Placement */
@@ -412,6 +389,24 @@ canvas {
     /* Fill width */
     max-height: 95vh;
     object-fit: contain;
+}
+
+.coord-tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: rgba(15, 23, 42, 0.9);
+    color: #38bdf8;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-weight: 600;
+    z-index: 2000;
+    display: none;
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
+    transform: translate(15px, 15px);
 }
 
 .hint {

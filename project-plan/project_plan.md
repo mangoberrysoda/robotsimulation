@@ -52,43 +52,47 @@ This project is a web-based simulation where autonomous robots explore an unknow
     -   Adjustable Heat Sensor Radius.
 
 ## Implementation Details
-- **Current Version**: 1.6 (Final UI Layout)
+- **Current Version**: 1.7 (Advanced Diagnostics & Layout)
 - **Primary Tech**: HTML5, CSS3, Vanilla JavaScript
 - **Core Methodology**: Pure procedural simulation with grid-based state synchronization.
 
-## Features & Progress (v1.6)
+## Features & Progress (v1.7)
+- [x] **Coordinate Diagnostics**: Integrated mouse-follow tooltip for logical (0-1000) grid coordinates.
+- [x] **Per-Robot Step Analysis**: Granular tracking of movement efficiency per agent ("pts / steps").
+- [x] **Aggregate Performance**: Total "Team Steps" metric for holistic simulation analysis.
+- [x] **Independent Columnar UI**: Restructured controls into separate columns to isolate widget scaling.
 - [x] **Intelligent Auto-Stop**: Halts on 100% coverage, step limit, or all robots returning home.
 - [x] **Interactive Settings**: Bidirectional sync between sliders and editable number inputs.
-- [x] **Final 2-Column Sidebar**: Map and Placement at top, Simulation below Robot Settings, and Live Stats spanning the right column.
-- [x] **Placement Toggle Buttons**: High-performance side-by-side selection tool (Survivors vs Robots).
-- [x] **Help System**: Professional documentation with integrated **Header Icon** HUD access (Semantic Header Fix).
+- [x] **Placement Optimization**: Reordered tools to prioritize Robots, with Robots active by default.
+- [x] **Help System**: Professional documentation with integrated **Header Icon** HUD access.
 - [x] **Expanded Fleet**: Support for up to 20 robots simultaneously.
 - [x] **Missed Area Highlighting**: Uncleaned traversable areas highlighted in Orange on end.
--   [x] **Collision Avoidance**: Line-of-sight checks prevent moving through walls.
--   [x] Coordination: Shared "Visited" grid preventing robots from re-exploring the same tiles redundantly.
--   [x] Backtracking: Robots retrace their steps when no new path is found.
--   [x] **Auto-Return**: Robots automatically switch to FINISHED state upon returning to start point after full exploration.
+- [x] **Collision Avoidance**: Line-of-sight checks prevent moving through walls.
+- [x] Coordination: Shared "Visited" grid preventing robots from re-exploring the same tiles redundantly.
+- [x] Backtracking: Robots retrace their steps when no new path is found.
+- [x] **Auto-Return**: Robots automatically switch to FINISHED state upon returning to start point.
 
 ### Phase 4: Sensors & Visualization (Completed)
--   [x] **Lidar Visualization**: Raycast cone drawn in yellow/transparent.
--   [x] **Heat Sensor Visualization**: Orange circle around robot.
--   [x] **Survivor Discovery**: Two-stage discovery (Located -> Saved).
+- [x] **Lidar Visualization**: Raycast cone drawn in yellow/transparent.
+- [x] **Heat Sensor Visualization**: Orange circle around robot.
+- [x] **Survivor Discovery**: Two-stage discovery (Located -> Saved).
+- [x] **Grid Tooltip**: Cursor-position coordinates displayed relative to 1000x1000 grid.
 
 ### Phase 5: Dashboard & Controls (Completed)
--   [x] **Live Stats Widget**:
-    -   Status (Idle/Running).
-    -   Active Robots count.
-    -   Free Area % (Static map openness).
-    -   Cleaned Area (Progress Bar).
-    -   Survivors Located vs Saved counts.
-    -   Total Steps.
-    -   Per-Robot Mapped Points table.
--   [x] **Simulation Controls**:
-    -   Speed (FPS) slider + manual number input.
-    -   Steps Per Update slider + manual number input.
-    -   Robot Count slider (1-20) + manual number input.
--   [x] **Help System**: Professional integrated help guide (`help.html`) with UI icon trigger.
--   [x] **Sensor Config**: Toggle visibility, adjust ranges.
+- [x] **Live Stats Widget**:
+    - Status (Idle/Running).
+    - Active Robots count + Robot Start Position.
+    - Free Area % (Static map openness).
+    - Cleaned Area (Progress Bar).
+    - Survivors Located vs Saved counts.
+    - Global Simulation Steps vs Total Team Steps.
+    - Per-Robot Mapped Points & Steps table.
+- [x] **Simulation Controls**:
+    - Speed (FPS) slider + manual number input.
+    - Steps Per Update slider + manual number input.
+    - Robot Count slider (1-20) + manual number input.
+- [x] **Help System**: Professional integrated help guide (`help.html`).
+- [x] **Sensor Config**: Toggle visibility, adjust ranges.
 
 ## 5. File Structure
 -   `/index.html`: Main UI layout with Control Panel and Canvas.

@@ -18,4 +18,4 @@ This document outlines the planned future features and long-term vision for the 
 *   **[ ] Swarm Intelligence**: Implement flocking behaviors or decentralized task allocation where robots "negotiate" who explores which sector.
 
 ---
-*Last Updated: 2026-03-02 (v1.6)*
+*Last Updated: 2026-03-04 (v1.7)*

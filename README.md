@@ -1,21 +1,26 @@
-# Robot Search & Rescue Simulation (v1.6)
+# Multi-Agent Robot Search & Rescue Simulation
 
-A high-performance, web-based simulation where autonomous robots explore an unknown environment to locate and save survivors. 
+[![Version](https://img.shields.io/badge/version-1.7-blue.svg)](./project-plan/changelog.md)
+[![Status](https://img.shields.io/badge/status-active-green.svg)](./project-plan/project_plan.md)
 
-![Project Version](https://img.shields.io/badge/Version-1.6-blue)
-![Tech Stack](https://img.shields.io/badge/Stack-HTML5%20|%20CSS3%20|%20JS-orange)
+An advanced web-based multi-agent simulation where robots explore unknown terrain to locate and save survivors using Lidar and Heat sensors. Developed with modern web technologies for high-performance procedural animation and coordination logic.
 
-## 🚀 Overview
-This simulation demonstrates autonomous exploration principles using shared memory coordination. Multiple robots collaborate to map a traversable area using Lidar and Heat sensors, prioritizing survival rescue while avoiding obstacles.
+---
 
-## ✨ Key Features
-- **Multi-Agent Coordination**: Shared "visited" grid ensures efficient area coverage across up to 20 robots.
-- **Dual Sensing System**: 
-  - **Heat Sensors**: Detect survivors through walls/obstacles (Stage 1: Located).
-  - **Lidar Sensors**: High-precision line-of-sight confirmation (Stage 2: Saved).
-- **Intelligent Auto-Stop**: Simulation halts automatically on 100% coverage or exploration completion.
-- **Professional Dashboard**: Real-time analytics, per-robot efficiency tracking, and interactive configuration sliders.
-- **Integrated Help HUD**: Instant access to a comprehensive user guide directly from the UI.
+### 🚀 Key Features (v1.7)
+- **Advanced Diagnostics**: Dynamic grid coordinate tooltip (0-1000) for surgical robot placement.
+- **Efficiency Analytics**: Individual robot step tracking ("pts vs steps") and team-wide aggregate metrics.
+- **Intelligent Navigation**: Greedy pathfinding with backtracking and shared map knowledge.
+- **Visual Feedback**: Heat sensor (Radius) and Lidar (Cone) visualization with line-of-sight collision checks.
+- **Professional Layout**: Optimized side-by-side columnar interface for maximum stability on large screens.
+
+---
+
+### 🛠️ Technology
+- **Engine**: Vanilla JavaScript (ES6)
+- **Graphics**: HTML5 Canvas (2D)
+- **Logic**: Grid-based procedural simulation
+- **Author**: Vaibhav Vinod
 
 ## 🛠️ Getting Started
 1. Open `index.html` in any modern web browser (Chrome/Edge recommended).
@@ -32,4 +37,4 @@ Detailed project information is available in the `project-plan/` directory:
 - **[Troubleshooting](project-plan/troubleshooting.md)**: Solutions for common performance and security questions.
 
 ---
-*Created by Vaibhav Vinod | v1.6 Final Release*
+*Created by Vaibhav Vinod | v1.7 Final Release*

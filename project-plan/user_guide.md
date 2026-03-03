@@ -4,22 +4,30 @@ Welcome to the Robot Search & Rescue Simulation. This guide will help you unders
 
 ## 1. Getting Started
 
-### 1.1. Uploading a Map
-The simulation requires an environment map to operate.
-*   **Custom Map**: Click **"Choose File"** to upload any image. The simulation treats **dark pixels** (brightness < 160) as obstacles and **light pixels** as traversable space.
-*   **Default Map**: Click **"Use Default"** to load the built-in obstacle map.
+### 1. Map Setup
+-   **Upload Map**: Choose an image file. The simulation converts brightness into a navigation grid (Dark = Obstacle).
+-   **Diagnostic Tooltip**: Hover your cursor over the map area to see real-time **Grid Coordinates (0-1000)**. Use these for pixel-perfect entity placement.
 
-#Use the **Placement** section to choose your tool:
-*   **Survivors**: Click on the map to add survivors (Red dots). These are the targets the robots need to find.
-*   **Robots (Start)**: Click on the map to set the starting point for all robots.
+### 2. Entity Placement
+-   **Robots (Default)**: Click on the map to set the shared starting point for your fleet.
+-   **Survivors**: Click on the map to hide survivors for the robots to find.
+-   **Clear All**: Resets the map entities.
 
-> [!TIP]
-> The active tool is highlighted with a blue glow. You cannot place entities inside obstacles (dark areas).
+---
 
-## 2. Simulation Controls
+## 🚀 Running the Simulation
 
-### 2.1. Adjusting Robot Count
-Use the **Count** slider (or type a number) to set how many robots will participate (1 to 20).
+1.  **Configure Robot Settings**:
+    -   **Count**: Deploy 1 to 20 robots.
+    -   **Lidar/Heat**: Adjust sensor ranges to balance speed and accuracy.
+2.  **Simulation Parameters**:
+    -   **Total Steps**: Maximum duration before auto-stop.
+    -   **Steps/Update**: Increase for high-speed "fast-forward" simulation.
+3.  **Monitor Live Stats**:
+    -   **Cleaned Area**: Visual progress bar of team coverage.
+    -   **Team Effort**: Tracks **Total Robot Steps** across the entire fleet.
+    -   **Efficiency Table**: Per-robot tracking of **Unique Points** vs **Movement Steps**.
+4.  **Auto-Stop**: The simulation will intelligently stop when the goal is reached or all robots return home.
 
 ### 2.2. Running the Simulation
 *   **Start/Stop**: Click the **Start** button to begin. The button will turn red and say **Stop** while the simulation is running.

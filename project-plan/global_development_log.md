@@ -76,7 +76,14 @@ This log preserves the complete chronological history of the Robotics Simulation
     - [x] **Integrated Help Guide**: Created HTML-based user manual (`help.html`).
     - [x] **UI HUD Entry**: Persistent help trigger next to app title.
     - [x] **Extended Repository**: Generated Roadmap, Troubleshooting, and Architecture Deep Dive docs.
-- **Phase 32: Professional UI Finalization (Latest)**
+
+## [2026-03-04] - v1.7: Diagnostics & Performance Analytics
+- **Grid Coordinate HUD**: Implemented cursor-following tooltip for precise placement diagnostics.
+- **Robot Telemetry**: Added per-robot step counters and aggregate total team steps.
+- **Layout Optimization**: Structural move to independent columns for a more robust sidebar.
+- **UX Refinement**: Robots set as default placement tool; tool order optimized.
+
+## [2026-03-02] - v1.6: UI/UX Finalization (Latest)**
     - [x] **Semantic Fix**: Switched header to `<header>` to resolve `nth-of-type` CSS conflicts.
     - [x] **Placement Polish**: Replaced radio buttons with side-by-side **Toggle Buttons**.
     - [x] **Layout Refinement**: Fixed widget order (Simulation under Settings, Stats on right).

@@ -23,6 +23,9 @@ const survivorsSavedEl = document.getElementById('survivorsSaved');
 const stepCountEl = document.getElementById('stepCount');
 const freeAreaEl = document.getElementById('freeArea');
 const robotMappedTableEl = document.getElementById('robotMappedTable');
+const coordTooltip = document.getElementById('coordTooltip');
+const startPosEl = document.getElementById('startPos');
+const totalRobotStepsEl = document.getElementById('totalRobotSteps');
 
 // Initialize Simulation
 const simulation = new Simulation(mapManager, {
@@ -40,14 +43,15 @@ const simulation = new Simulation(mapManager, {
         survivorsLocatedEl.textContent = data.survivorsLocated;
         survivorsSavedEl.textContent = data.survivorsSaved;
         stepCountEl.textContent = data.steps;
+        if (totalRobotStepsEl) totalRobotStepsEl.textContent = data.totalRobotSteps;
 
         // Per-robot mapped points table
         if (robotMappedTableEl && data.robotMappedPoints) {
             robotMappedTableEl.innerHTML = data.robotMappedPoints
                 .map(r => `<div class="robot-mapped-row">
                     <span class="robot-dot" style="background:${r.color}"></span>
-                    <span class="robot-label">R${r.id}</span>
-                    <span class="robot-count">${r.count} pts</span>
+                    <span class="robot-label">R${r.id}:</span>
+                    <span class="robot-count">${r.count} pts / ${r.steps} steps</span>
                 </div>`)
                 .join('');
         }
@@ -68,7 +72,7 @@ const simulation = new Simulation(mapManager, {
 });
 
 // State
-let currentTool = 'survivor'; // 'survivor' or 'robot'
+let currentTool = 'robot'; // 'survivor' or 'robot'
 
 // Event Listeners
 mapUpload.addEventListener('change', (e) => {
@@ -82,6 +86,7 @@ mapUpload.addEventListener('change', (e) => {
                 mapManager.clearEntities();
                 simulation.reset(); // Effectively clears robots and resets steps
                 simulation.robots = []; // Double check clear
+                if (startPosEl) startPosEl.textContent = "—";
             })
             .catch(err => console.error("Error loading map:", err));
     }
@@ -97,6 +102,7 @@ useDefaultMapBtn.addEventListener('click', () => {
             mapManager.clearEntities();
             simulation.reset();
             simulation.robots = [];
+            if (startPosEl) startPosEl.textContent = "—";
         })
         .catch(err => alert("Failed to load default map."));
 });
@@ -142,14 +148,43 @@ canvas.addEventListener('mousedown', (e) => {
         const success = mapManager.setRobotStart(x, y);
         if (success) {
             simStatus.textContent = "Start Point Set";
+            if (startPosEl) startPosEl.textContent = `(${Math.round(x)}, ${Math.round(y)})`;
         }
     }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+    if (simulation.isRunning) {
+        coordTooltip.style.display = 'none';
+        return;
+    }
+
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    const x = Math.round((e.clientX - rect.left) * scaleX);
+    const y = Math.round((e.clientY - rect.top) * scaleY);
+
+    if (x >= 0 && x <= canvas.width && y >= 0 && y <= canvas.height) {
+        coordTooltip.textContent = `X: ${x}, Y: ${y}`;
+        coordTooltip.style.left = `${e.clientX}px`;
+        coordTooltip.style.top = `${e.clientY}px`;
+        coordTooltip.style.display = 'block';
+    } else {
+        coordTooltip.style.display = 'none';
+    }
+});
+
+canvas.addEventListener('mouseleave', () => {
+    coordTooltip.style.display = 'none';
 });
 
 // Clear Button
 clearBtn.addEventListener('click', () => {
     mapManager.clearEntities();
     simStatus.textContent = "Entities Cleared";
+    if (startPosEl) startPosEl.textContent = "—";
 });
 
 // Sliders (Update Config)
@@ -231,6 +266,8 @@ toggleSimBtn.addEventListener('click', () => {
         toggleSimBtn.classList.remove('btn-stop');
         toggleSimBtn.classList.add('btn-start');
     } else {
+        // Hide tooltip when starting
+        coordTooltip.style.display = 'none';
         // START
         const count = parseInt(document.getElementById('robotCount').value);
         if (simulation.robots.length !== count || simulation.robots.length === 0) {

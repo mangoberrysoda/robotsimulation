@@ -20,9 +20,12 @@ class Robot {
         this.history = []; // Stack of {x,y} for backtracking
         this.foundSurvivors = new Set(); // Ids
         this.mappedGrid = new Map(); // Global map knowledge shared via wifi
+        this.steps = 0;
     }
 
     update(stepCount) {
+        if (this.state === 'FINISHED') return;
+        this.steps++;
         if (this.state === 'IDLE' || this.state === 'COMPLETE') {
             this.decideNextMove();
         } else if (this.state === 'ROTATING') {

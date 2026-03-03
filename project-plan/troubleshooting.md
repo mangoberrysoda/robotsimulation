@@ -34,3 +34,4 @@
 ## 4. General Tips
 *   **Browser Support**: Use **Chrome** or **Edge** for the best Canvas performance.
 *   **Reset vs Clear**: Remember that **Reset** keeps your robots and survivors in place, while **Clear All** removes everything except the map.
+*Last Updated: 2026-03-04 (v1.7)*

@@ -1,40 +1,43 @@
-# Walkthrough - Integrated Help & Documentation (v1.4)
+# Walkthrough - Robot Simulation v1.7
 
-I've refined the search and rescue logic to be more realistic and resolved the critical Lidar detection issues.
+This walkthrough documents the implementation and verification of the v1.7 "Diagnostics & Performance Analytics" update.
 
-## Key Improvements
+## Changes Made
 
-### 1. Robust Map Loading
-- **Base64 Bypass**: The default map is now embedded as Base64 data in `js/default-map.js`. This permanently eliminates "Canvas Tainted" security errors, allowing the Lidar to work instantly.
-- **Improved Manual Upload**: Manual uploads now use multi-point sampling for 100% accuracy on thin walls.
+### 1. Diagnostic Tools
+- **Grid Coordinate Tooltip**: Implemented a dynamic HUD that follows the mouse when over the map, showing logical coordinates (0-1000). This allows for precise entity placement.
+- **Robot Start Position**: Added a field in Live Stats to explicitly show the coordinates where robots are currently set to spawn.
 
-### 2. Precise Lidar Detection
-- **Multi-Point Sampling**: The robot now checks 5 points per grid cell (Center + 4 corners). This ensures that even the thinnest wall lines are detected as obstacles.
-- **Physical Survivors**: Survivors now act as solid obstacles that block Lidar rays and cast shadows.
-- **Self-Obstruction Fix**: Added a 15px 'safe zone' around the robot center to prevent sensor self-blocking.
+### 2. Performance Analytics
+- **Individual Step Tracking**: Modified the `Robot` class to track its own movement steps.
+- **Aggregate Metrics**: Added "Total Robot Steps" to track the combined team effort of all active robots.
+- **Enhanced Stats Table**: Updated the "Mapped Points / Robot" table to show both points and steps (e.g., `R1: 45 pts / 120 steps`).
 
-### 4. Interactive Automation
-- **Intelligent Stop**: The simulation now halts automatically when 100% of the map is cleaned, all robots have returned to base, or the step limit is reached.
-- **Bidirectional Settings**: All range sliders are now paired with editable number inputs for precise control.
-- **Orange Highlight**: If the simulation stops with uncleaned areas, they are highlighted in **Bright Orange** (100% opacity) for instant visibility of missed zones.
-- **Expanded Analytics**:
-    - **Free Area %**: Displays the total traversable percentage of the current map.
-    - **Per-Robot Mapping**: Tracks the unique number of grid points explored by each individual agent.
+### 3. Structural & UX Improvements
+- **Independent Columnar Layout**: Restructured the controls area into two vertical columns. Widgets in each column stay tightly packed at the top even if the other column expands vertically.
+- **Robots-First Workflow**: Reordered placement tools and set "Robots (Start)" as the default active tool.
 
-### 5. Efficiency Improvements
-- **Reduced Boundary Padding**: Boundary padding was reduced from 20px to 10px (1 cell), giving robots more room to navigate tight edges.
-- **Increased Capacity**: The system now supports up to **20 robots** simultaneously.
+## Verification Results
 
-### 6. Professional Guidance System
-- **Integrated Help HUD**: A new `?` icon in the main header links to a professional, dark-themed `help.html` guide.
-- **Extended Documentation**: Comprehensive project records are now bundled:
-    - **User Guide**: Step-by-step operational manual.
-    - **Roadmap**: Vision for v2.0 and swarm intelligence.
-    - **Architecture Deep Dive**: Explanation of Raycasting and Grid sampling math.
-    - **Troubleshooting**: Solution to common browser and rendering issues.
+### Diagnostics
+- [x] Verified tooltip shows correct logical coordinates relative to the 1000x1000 grid.
+- [x] Verified tooltip hides correctly when simulation is running or mouse leaves the canvas.
+- [x] Verified "Start Pos" updates immediately when a robot start point is set.
 
-## Verification
-- **Sequence**: Robots correctly transition from searching to rotating to saving.
-- **Auto-Stop**: Confirmed alerts and control unlocking upon reaching completion triggers.
-- **Sync**: Number inputs correctly clamp to valid ranges and update sliders in real-time.
-- **Navigation**: Verified the Help icon opens the professional guide in a new tab without interrupting simulation state.
+### Analytics
+- [x] Verified steps increment for each robot during their movement phases.
+- [x] Verified that steps **STOP** incrementing once a robot reaches the `FINISHED` state.
+- [x] Verified "Total Robot Steps" is equal to the sum of all individual robot steps.
+
+### Layout
+- [x] Verified that adding 20 robots (expanding the stats table) does NOT push down or scale the "Simulation" widget.
+- [x] Verified "Simulation" stays immediately below "Robot Settings" in the left column.
+
+## Visual Confirmation
+
+### v1.7 UI Layout & Analytics
+![Final Simulation State](final_simulation_state_v1_7.png)
+
+### Verification Session Recording
+![UI Verification v1.7 Recording](ui_verification_v1_7_session.webp)
+

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.7] - 2026-03-04
+### Added
+- **Coordinate Tooltip**: Added a dynamic, cursor-following tooltip that displays logical grid coordinates (0-1000) for easier placement.
+- **Robot Start Position**: Live Stats now displays the starting coordinates of the placed robot for precise tracking.
+- **Per-Robot Step Tracking**: Robots now track their individual movement steps, displayed alongside unique mapped points in the stats table.
+- **Total Aggregate Steps**: Added a "Total Robot Steps" field to the Live Stats widget to track combined team effort.
+### Changed
+- **UI Layout Stabilization**: Restructured the controls area into two independent columns to prevent height-stretching issues when stats expand.
+- **Default Interaction**: Changed the default placement tool to "Robots" for a faster startup workflow.
+### Fixed
+- **Ghost Step Increment**: Resolved an issue where robots in the `FINISHED` state continued to increment their step count.
+
 ## [1.6] - 2026-03-02
 ### Added
 - **Placement Toggle Buttons**: Replaced radio buttons with modern, side-by-side toggle buttons with active state highlighting.
@@ -46,5 +58,5 @@ All notable changes to this project will be documented in this file.
 - **Backtracking**: Basic history stack for robots in dead-ends.
 
 ---
-*Documentation Version: 1.6*
-# Last updated: 2026-03-02
+*Documentation Version: 1.7*
+# Last updated: 2026-03-04

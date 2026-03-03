@@ -29,12 +29,25 @@ Each robot maintains a `history` stack of previously visited points.
 *   If no new unvisited points are reachable within the sensor range, the robot pops the last point from its `history` and sets it as the next target.
 *   This continues until a new unvisited area is found or the robot returns to the starting point (Empty stack).
 
-## 4. Multi-Robot Coordination
+### 3.3. Robot Model (`robot.js`)
+- **State Machine**: Procedural state handling (`IDLE`, `SCANNING`, `ROTATING`, `MOVING`, `COMPLETE`).
+- **Telemetry**: Each robot maintains a local `steps` counter, incremented only when active (State != `FINISHED`).
+- **Pathing**: Greedy unvisited node selection with backtracking via a coordinate history stack.
+
+## 4. Simulation Engine (`simulation.js`)
+- **Loop**: `requestAnimationFrame` with variable logic steps per frame.
+- **Aggregation**: Real-time summation of individual robot telemetry into global "Total Team Steps".
+- **Auto-Stop**: Intelligent goal verification (Coverage == 100% OR all robots `FINISHED`).
+
+## 5. Multi-Robot Coordination
 Coordination is handled via **Shared Memory Simulation**:
 *   All robots write to a single `globalGrid` within the `MapManager`.
 *   When Robot A visits a cell, it marks it as `visited: true` and `ownerId: A`.
 *   Robot B sees this cell as already "Cleaned" and will not select it as a target, effectively forcing robots to spread out.
 
-## 6. UI & State Management
+## 6. Visualization & Interface
+- **Coordinate System**: Mapping of physical CSS pixels to logical 1000x1000 grid coordinates via `MapManager` scaling logic.
+- **Diagnostic HUD**: Real-time tooltip implementation using viewport-relative `fixed` positioning to avoid layout shifting.
+- **Layout Architecture**: 2-Column modular flexbox design ensures independent scaling of the Live Stats widget.
 *   **Semantic Indexing**: The control panel uses a `<header>` tag for the title to preserve CSS `nth-of-type` indexing for the simulation blocks. This ensures that adding UI elements like the Help HUD doesn't shift the 2-column grid layout.
 *   **Toggle Logic**: Tool selection is managed via `data-tool` attributes on buttons, allowing for a more responsive and accessible alternative to traditional radio inputs.
