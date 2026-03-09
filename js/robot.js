@@ -21,6 +21,7 @@ class Robot {
         this.foundSurvivors = new Set(); // Ids
         this.mappedGrid = new Map(); // Global map knowledge shared via wifi
         this.steps = 0;
+        this.distancePixels = 0;
     }
 
     update(stepCount) {
@@ -190,6 +191,7 @@ class Robot {
 
         if (dist <= speed) {
             // Arrived
+            this.distancePixels += dist;
 
             // If this was just a rotation target (survivor), we don't 'arrive' and consume it.
             // Actually, if we are in MOVING state, it means we finished rotating.
@@ -225,6 +227,7 @@ class Robot {
             const rad = Utils.degToRad(this.angle);
             this.x += Math.cos(rad) * speed;
             this.y += Math.sin(rad) * speed;
+            this.distancePixels += speed;
         }
     }
 

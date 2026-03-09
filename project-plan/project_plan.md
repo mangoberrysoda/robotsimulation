@@ -52,11 +52,15 @@ This project is a web-based simulation where autonomous robots explore an unknow
     -   Adjustable Heat Sensor Radius.
 
 ## Implementation Details
-- **Current Version**: 1.7 (Advanced Diagnostics & Layout)
+- **Current Version**: 1.8 (Distance Tracking & Calibration)
 - **Primary Tech**: HTML5, CSS3, Vanilla JavaScript
 - **Core Methodology**: Pure procedural simulation with grid-based state synchronization.
 
-## Features & Progress (v1.7)
+## Features & Progress (v1.8)
+- [x] **Distance Calibration**: User input for meters-per-pixel scale (default 1m/10px).
+- [x] **Meter-Scale Telemetry**: Real-time distance tracking in meters for each robot and **Total Team Distance** aggregate.
+- [x] **Step Definition HUD**: Direct UI feedback explaining logical step definitions (2px/10&deg;).
+- [x] **Diagonal Accuracy**: Euclidean distance calculation for precise physical displacement.
 - [x] **Coordinate Diagnostics**: Integrated mouse-follow tooltip for logical (0-1000) grid coordinates.
 - [x] **Per-Robot Step Analysis**: Granular tracking of movement efficiency per agent ("pts / steps").
 - [x] **Aggregate Performance**: Total "Team Steps" metric for holistic simulation analysis.

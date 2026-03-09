@@ -44,6 +44,8 @@ const simulation = new Simulation(mapManager, {
         survivorsSavedEl.textContent = data.survivorsSaved;
         stepCountEl.textContent = data.steps;
         if (totalRobotStepsEl) totalRobotStepsEl.textContent = data.totalRobotSteps;
+        const totalDistanceEl = document.getElementById('totalDistanceMeters');
+        if (totalDistanceEl) totalDistanceEl.textContent = data.totalDistanceMeters + "m";
 
         // Per-robot mapped points table
         if (robotMappedTableEl && data.robotMappedPoints) {
@@ -51,7 +53,7 @@ const simulation = new Simulation(mapManager, {
                 .map(r => `<div class="robot-mapped-row">
                     <span class="robot-dot" style="background:${r.color}"></span>
                     <span class="robot-label">R${r.id}:</span>
-                    <span class="robot-count">${r.count} pts / ${r.steps} steps</span>
+                    <span class="robot-count">${r.count} pts / ${r.steps} steps / ${r.distance}m</span>
                 </div>`)
                 .join('');
         }
@@ -197,6 +199,7 @@ const updateConfig = () => {
         simSpeed: parseInt(document.getElementById('simSpeed').value),
         stepsPerUpdate: parseInt(document.getElementById('stepsPerUpdate').value),
         totalSteps: parseInt(document.getElementById('totalSteps').value),
+        metersPer10Px: parseFloat(document.getElementById('metersPer10Px').value) || 1.0,
     });
 };
 
@@ -254,6 +257,7 @@ linkSliderNum('stepsPerUpdate', 'stepsPerUpdateDisplay', updateConfig);
 
 document.getElementById('sensorsToggle').addEventListener('change', updateConfig);
 document.getElementById('totalSteps').addEventListener('change', updateConfig);
+document.getElementById('metersPer10Px').addEventListener('change', updateConfig);
 
 // Sim Controls
 const toggleSimBtn = document.getElementById('toggleSim');

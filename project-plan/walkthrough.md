@@ -9,9 +9,9 @@ This walkthrough documents the implementation and verification of the v1.7 "Diag
 - **Robot Start Position**: Added a field in Live Stats to explicitly show the coordinates where robots are currently set to spawn.
 
 ### 2. Performance Analytics
-- **Individual Step Tracking**: Modified the `Robot` class to track its own movement steps.
-- **Aggregate Metrics**: Added "Total Robot Steps" to track the combined team effort of all active robots.
-- **Enhanced Stats Table**: Updated the "Mapped Points / Robot" table to show both points and steps (e.g., `R1: 45 pts / 120 steps`).
+- **Individual Step & Distance Tracking**: Robots now track their movement steps and physical pixels traveled (converted to meters).
+- **Aggregate Metrics**: Added "Total Robot Steps" and "Total Team Distance" to track the combined efforts of the fleet.
+- **Enhanced Stats Table**: Updated the display to show `R1: 45 pts / 120 steps / 12.00m`.
 
 ### 3. Structural & UX Improvements
 - **Independent Columnar Layout**: Restructured the controls area into two vertical columns. Widgets in each column stay tightly packed at the top even if the other column expands vertically.
@@ -28,6 +28,7 @@ This walkthrough documents the implementation and verification of the v1.7 "Diag
 - [x] Verified steps increment for each robot during their movement phases.
 - [x] Verified that steps **STOP** incrementing once a robot reaches the `FINISHED` state.
 - [x] Verified "Total Robot Steps" is equal to the sum of all individual robot steps.
+- [x] Verified "Total Team Distance" is equal to the sum of all individual robot distances.
 
 ### Layout
 - [x] Verified that adding 20 robots (expanding the stats table) does NOT push down or scale the "Simulation" widget.

@@ -16,6 +16,7 @@ class Simulation {
             heatSensorRange: 80,
             showSensors: true
         };
+        this.metersPer10Px = 1.0;
     }
 
     spawnRobots(count) {
@@ -73,6 +74,7 @@ class Simulation {
         this.robotConfig = { ...this.robotConfig, ...config };
         this.totalSteps = config.totalSteps || this.totalSteps;
         this.stepsPerUpdate = config.stepsPerUpdate || this.stepsPerUpdate;
+        this.metersPer10Px = config.metersPer10Px !== undefined ? config.metersPer10Px : this.metersPer10Px;
         // New: Speed Control
         this.fpsLimit = config.simSpeed || 60;
 
@@ -192,10 +194,13 @@ class Simulation {
             id: r.id,
             color: r.color,
             count: r.visitedPoints.size,
-            steps: r.steps
+            steps: r.steps,
+            distance: ((r.distancePixels / 10) * this.metersPer10Px).toFixed(2)
         }));
 
         const totalRobotSteps = this.robots.reduce((acc, r) => acc + r.steps, 0);
+        const totalDistancePixels = this.robots.reduce((acc, r) => acc + r.distancePixels, 0);
+        const totalDistanceMeters = ((totalDistancePixels / 10) * this.metersPer10Px).toFixed(2);
 
         this.uiCallbacks.updateStats({
             status: this.isRunning ? "Running" : "Idle",
@@ -206,6 +211,7 @@ class Simulation {
             survivorsLocated: `${totalLocated} / ${this.mapManager.survivors.length}`,
             steps: this.stepCount,
             totalRobotSteps: totalRobotSteps,
+            totalDistanceMeters: totalDistanceMeters,
             robotMappedPoints
         });
     }

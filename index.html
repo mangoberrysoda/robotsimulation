@@ -71,6 +71,10 @@
                     <label>
                         Total Steps: <input type="number" id="totalSteps" value="10000">
                     </label>
+                    <label>
+                        Meters / 10px: <input type="number" id="metersPer10Px" value="1.0" step="0.1" min="0.1">
+                    </label>
+                    <p class="hint">1 step movement = 2px, 1 step rotation = 10&deg;</p>
                     <div class="button-row">
                         <button id="toggleSim" class="btn-start">Start</button>
                         <button id="resetSim" class="danger">Reset</button>
@@ -129,6 +133,10 @@
                         <div class="stat-item">
                             <span>Total Robot Steps:</span>
                             <span id="totalRobotSteps">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Total Team Distance:</span>
+                            <span id="totalDistanceMeters">0m</span>
                         </div>
                         <div class="stat-item stat-item--col">
                             <span>Mapped Points / Robot:</span>
